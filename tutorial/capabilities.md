@@ -84,3 +84,5 @@ Optional -- 其对应的值可能为空。
 ![image](https://github.com/user-attachments/assets/d010ff9d-f1df-406c-a3ed-64590022f7c2)
 
 （不仅如此，现在你还能用/data指令看到机器的内容物了）
+
+[**点此进入下一章节**](/tutorial/tick.md)
