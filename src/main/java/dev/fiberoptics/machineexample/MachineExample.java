@@ -2,6 +2,7 @@ package dev.fiberoptics.machineexample;
 
 import dev.fiberoptics.machineexample.block.ModBlocks;
 import dev.fiberoptics.machineexample.block.entity.ModBlockEntities;
+import dev.fiberoptics.machineexample.item.ModItems;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -15,5 +16,6 @@ public class MachineExample {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+        ModItems.register(modEventBus);
     }
 }
