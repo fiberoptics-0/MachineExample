@@ -45,4 +45,14 @@
 
 额。。。看上去不是非常有意思。这个方块完全没有模型！更糟的是，它把下面方块的材质也剔除掉了。不过至少Minecraft的/data指令能正确的将其识别为方块实体了。
 
+之所以会出现这个问题是因为方块实体的存在让游戏不知道该如何渲染这个方块了。让我们在ExampleMachineBlock类里修正这个问题：
+
+![image](https://github.com/user-attachments/assets/bef839be-5ca8-45e3-9a1b-8452d7a388fa)
+
+看看效果：
+
+![image](https://github.com/user-attachments/assets/20888500-0f62-404e-8336-6e204db0ac5d)
+
+（是的，我们给它套了个铁块的皮，这样看上去没那么刺眼）
+
 [**点我进入下一章节**](/tutorial/capabilities.md)
