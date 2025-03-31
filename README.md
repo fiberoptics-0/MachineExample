@@ -2,4 +2,4 @@
 
 请勿试图将此教程中的代码应用于其他Minecraft版本，作者无法保证其能够正常运行（事实上，作者几乎可以保证部分代码不可能正常运行）
 
-<a href = "../blob/tutorial/block_entity.md">点我开始</a>
+<a href = "https://github.com/fiberoptics-0/MachineExample/tutorial/block_entity.md">点我开始</a>
