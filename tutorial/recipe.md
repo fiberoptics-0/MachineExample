@@ -100,3 +100,5 @@ fromNetwork其实就是将toNetwork里编码的数据读取出来，但是请务
 ![image](https://github.com/user-attachments/assets/edf99a7a-21e5-478a-b34c-b7852a1964a2)
 
 收工。
+
+[**点此进入下一章节**](/tutorial/fluid.md)
