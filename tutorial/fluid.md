@@ -7,7 +7,10 @@
 
 为了跟上时代的步伐，我们现在给机器加上IFluidHandler，让它能处理流体相关的配方。
 
-先说坏消息：这次没有捷径可以走了，我们只能自己手动实现IFluidHandler（和INBTSerializable）。
+先说坏消息：这次没有捷径可以走了，我们只能自己手动实现IFluidHandler（和INBTSerializable）：
+
+![image](https://github.com/user-attachments/assets/36bc70c0-98e0-45ce-943f-7c477e832d61)
+
 
 由于此接口的方法实在有些多而且很无聊，故不在教程内部展示截图，可以[点击链接](/src/main/java/dev/fiberoptics/machineexample/capability/ModFluidStackHandler.java)自行查看。
 
