@@ -1,5 +1,6 @@
 package dev.fiberoptics.machineexample.block.entity;
 
+import dev.fiberoptics.machineexample.capability.ModFluidStackHandler;
 import dev.fiberoptics.machineexample.capability.ModItemStackHandler;
 import dev.fiberoptics.machineexample.recipe.ExampleMachineRecipe;
 import dev.fiberoptics.machineexample.recipe.ModRecipeTypes;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +29,8 @@ import java.util.Optional;
 public class ExampleMachineBlockEntity extends BlockEntity {
 
     private final ModItemStackHandler inventory = new ModItemStackHandler();
+    private final ModFluidStackHandler fluidInventory = new ModFluidStackHandler();
+    private final LazyOptional<IFluidHandler> fluidInventoryCap = LazyOptional.of(() -> fluidInventory);
     private final LazyOptional<IItemHandler> inventoryCap = LazyOptional.of(() -> inventory);
     private static final int MAX_PROGRESS = 60;
     private int progress = 0;
@@ -35,6 +39,9 @@ public class ExampleMachineBlockEntity extends BlockEntity {
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if(cap == ForgeCapabilities.ITEM_HANDLER) {
             return inventoryCap.cast();
+        }
+        if (cap == ForgeCapabilities.FLUID_HANDLER) {
+            return fluidInventoryCap.cast();
         }
         return super.getCapability(cap, side);
     }
@@ -86,6 +93,7 @@ public class ExampleMachineBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag tag) {
         tag.putInt("progress", progress);
         tag.put("Inventory",inventory.serializeNBT());
+        tag.put("FluidInventory",fluidInventory.serializeNBT());
         super.saveAdditional(tag);
     }
 
@@ -93,6 +101,7 @@ public class ExampleMachineBlockEntity extends BlockEntity {
     public void load(CompoundTag tag) {
         progress = tag.getInt("progress");
         inventory.deserializeNBT(tag.getCompound("Inventory"));
+        fluidInventory.deserializeNBT(tag.getCompound("FluidInventory"));
         super.load(tag);
     }
 
