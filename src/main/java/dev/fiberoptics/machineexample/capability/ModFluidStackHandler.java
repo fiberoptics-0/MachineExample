@@ -109,7 +109,7 @@ public class ModFluidStackHandler implements IFluidHandler, INBTSerializable<Com
         for(int i = 0; i < listTag.size(); i++) {
             CompoundTag stackTag = listTag.getCompound(i);
             int slot = stackTag.getInt("Slot");
-            if(slot>0 && slot<fluidStacks.size()) {
+            if(slot>=0 && slot<fluidStacks.size()) {
                 fluidStacks.set(slot, FluidStack.loadFluidStackFromNBT(stackTag));
             }
         }

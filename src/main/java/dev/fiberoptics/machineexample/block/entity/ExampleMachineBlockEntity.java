@@ -4,6 +4,7 @@ import dev.fiberoptics.machineexample.capability.ModFluidStackHandler;
 import dev.fiberoptics.machineexample.capability.ModItemStackHandler;
 import dev.fiberoptics.machineexample.recipe.ExampleMachineRecipe;
 import dev.fiberoptics.machineexample.recipe.ModRecipeTypes;
+import dev.fiberoptics.machineexample.recipe.container.ModContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,10 +20,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import oshi.util.tuples.Pair;
 
 import java.util.Optional;
 
@@ -55,14 +58,25 @@ public class ExampleMachineBlockEntity extends BlockEntity {
     }
 
     private void tick(Level level, BlockPos pos, BlockState state) {
-        ItemStack result = this.getResult();
-        if(!getResult().isEmpty()) {
+        Pair<FluidStack,ItemStack> result = this.getResult();
+        if(!result.getA().isEmpty() || !result.getB().isEmpty()) {
             if(progress >= MAX_PROGRESS) {
-                ItemStack stack = inventory.getStackInSlot(2);
-                if(stack.isEmpty() || (stack.is(result.getItem()) && stack.getCount() + 1 <= stack.getMaxStackSize())) {
+                ItemStack resultItem = result.getB();
+                FluidStack resultFluid = result.getA();
+                ItemStack itemStack = inventory.getStackInSlot(1);
+                FluidStack fluidStack = fluidInventory.getFluidInTank(1);
+                boolean itemCondition = (itemStack.isEmpty() || (itemStack.is(resultItem.getItem()) &&
+                        itemStack.getCount()+resultItem.getCount() <= itemStack.getMaxStackSize()));
+                boolean fluidCondition = (fluidStack.isEmpty() || (fluidStack.isFluidEqual(resultFluid) &&
+                        fluidStack.getAmount()+resultFluid.getAmount() <= fluidInventory.getTankCapacity(1)));
+                if(itemCondition && fluidCondition) {
+                    fluidInventory.getFluidInTank(0).shrink(this.getFluidCost());
                     inventory.getStackInSlot(0).shrink(1);
-                    inventory.getStackInSlot(1).shrink(1);
-                    inventory.setStackInSlot(2, new ItemStack(result.getItem(),stack.getCount() + 1));
+                    inventory.setStackInSlot(1,
+                            new ItemStack(resultItem.getItem(), itemStack.getCount()+resultItem.getCount()));
+                    fluidInventory.setFluidInTank(1,
+                            new FluidStack(resultFluid.getFluid(),
+                                    resultFluid.getAmount()+fluidStack.getAmount()));
                     progress = 0;
                 }
             } else {
@@ -71,16 +85,28 @@ public class ExampleMachineBlockEntity extends BlockEntity {
         }
     }
 
-    private ItemStack getResult() {
-        SimpleContainer inv = new SimpleContainer(2);
+    private Optional<ExampleMachineRecipe> getRecipe() {
+        ModContainer inv = new ModContainer();
         inv.setItem(0, inventory.getStackInSlot(0));
-        inv.setItem(1, inventory.getStackInSlot(1));
-        Optional<ExampleMachineRecipe> recipe =
-                this.level.getRecipeManager().getRecipeFor(ExampleMachineRecipe.Type.INSTANCE,inv,this.level);
+        inv.setFluidStack(0, fluidInventory.getFluidInTank(0));
+        return this.level.getRecipeManager().getRecipeFor(ExampleMachineRecipe.Type.INSTANCE,inv,this.level);
+    }
+
+    private Pair<FluidStack,ItemStack> getResult() {
+        Optional<ExampleMachineRecipe> recipe = this.getRecipe();
         if(recipe.isPresent()) {
-            return recipe.get().getResultItem(null);
+            return new Pair<>(recipe.get().getOutputFluid(), recipe.get().getResultItem(null));
         } else {
-            return ItemStack.EMPTY;
+            return new Pair<>(FluidStack.EMPTY, ItemStack.EMPTY);
+        }
+    }
+
+    private int getFluidCost() {
+        Optional<ExampleMachineRecipe> recipe = this.getRecipe();
+        if(recipe.isPresent()) {
+            return recipe.get().getFluidCost();
+        } else {
+            return 0;
         }
     }
 

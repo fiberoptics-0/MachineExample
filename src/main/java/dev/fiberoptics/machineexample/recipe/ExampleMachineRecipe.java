@@ -2,6 +2,8 @@ package dev.fiberoptics.machineexample.recipe;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import dev.fiberoptics.machineexample.recipe.container.ModContainer;
+import dev.fiberoptics.machineexample.util.Utils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,33 +17,43 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.Nullable;
 
-public class ExampleMachineRecipe implements Recipe<SimpleContainer> {
+public class ExampleMachineRecipe implements Recipe<ModContainer> {
 
-    private final NonNullList<Ingredient> ingredients;
-    private final ItemStack result;
+    private final Ingredient inputItem;
+    private final FluidStack inputFluid;
+    private final ItemStack outputItem;
+    private final FluidStack outputFluid;
     private final ResourceLocation id;
 
-    public ExampleMachineRecipe(NonNullList<Ingredient> ingredients, ItemStack result, ResourceLocation id) {
-        this.ingredients = ingredients;
-        this.result = result;
+    public ExampleMachineRecipe(Ingredient inputItem, FluidStack inputFluid,
+                                FluidStack outputFluid,ItemStack outputItem, ResourceLocation id) {
+        this.inputItem = inputItem;
+        this.inputFluid = inputFluid;
+        this.outputItem = outputItem;
+        this.outputFluid = outputFluid;
         this.id = id;
     }
 
     @Override
-    public boolean matches(SimpleContainer inv, Level level) {
+    public boolean matches(ModContainer inv, Level level) {
         if(level.isClientSide()) return false;
-        boolean condition1 = ingredients.get(0).test(inv.getItem(0)) &&
-                ingredients.get(1).test(inv.getItem(1));
-        boolean condition2 = ingredients.get(0).test(inv.getItem(1)) &&
-                ingredients.get(1).test(inv.getItem(0));
-        return condition1 || condition2;
+        boolean condition1 = inputItem.test(inv.getItem(0));
+        boolean condition2 = inputFluid.isFluidEqual(inv.getFluidStack(0)) &&
+                inv.getFluidStack(0).getAmount() >= inputFluid.getAmount();
+        return condition1 && condition2;
+    }
+
+    public int getFluidCost() {
+        return inputFluid.getAmount();
     }
 
     @Override
-    public ItemStack assemble(SimpleContainer simpleContainer, RegistryAccess registryAccess) {
-        return this.result.copy();
+    public ItemStack assemble(ModContainer simpleContainer, RegistryAccess registryAccess) {
+        return this.outputItem.copy();
     }
 
     @Override
@@ -51,7 +63,11 @@ public class ExampleMachineRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public ItemStack getResultItem(RegistryAccess registryAccess) {
-        return this.result.copy();
+        return this.outputItem.copy();
+    }
+
+    public FluidStack getOutputFluid() {
+        return this.outputFluid;
     }
 
     @Override
@@ -78,34 +94,35 @@ public class ExampleMachineRecipe implements Recipe<SimpleContainer> {
 
         @Override
         public ExampleMachineRecipe fromJson(ResourceLocation resourceLocation, JsonObject jsonObject) {
-            JsonObject outputJson = GsonHelper.getAsJsonObject(jsonObject, "output");
-            ItemStack output = CraftingHelper.getItemStack(outputJson, true,true);
-            JsonArray ingredientsJson = GsonHelper.getAsJsonArray(jsonObject, "ingredients");
-            NonNullList<Ingredient> ingredients = NonNullList.withSize(2, Ingredient.EMPTY);
-            for (int i = 0; i < ingredientsJson.size(); ++i) {
-                ingredients.set(i,Ingredient.fromJson(ingredientsJson.get(i)));
-            }
-            return new ExampleMachineRecipe(ingredients, output, resourceLocation);
+            JsonObject outputsJson = GsonHelper.getAsJsonObject(jsonObject, "outputs");
+            JsonObject inputsJson = GsonHelper.getAsJsonObject(jsonObject, "inputs");
+            JsonObject outputItemJson = GsonHelper.getAsJsonObject(outputsJson, "item");
+            JsonObject outputFluidJson = GsonHelper.getAsJsonObject(outputsJson, "fluid");
+            JsonObject inputItemJson = GsonHelper.getAsJsonObject(inputsJson, "item");
+            JsonObject inputFluidJson = GsonHelper.getAsJsonObject(inputsJson, "fluid");
+            ItemStack outputItem = CraftingHelper.getItemStack(outputItemJson, true,true);
+            FluidStack outputFluid = Utils.getFluidStack(outputFluidJson);
+            Ingredient inputItem = Ingredient.fromJson(inputItemJson);
+            FluidStack inputFluid = Utils.getFluidStack(inputFluidJson);
+            return new ExampleMachineRecipe(inputItem,inputFluid,outputFluid,outputItem,resourceLocation);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf friendlyByteBuf, ExampleMachineRecipe exampleMachineRecipe) {
-            friendlyByteBuf.writeVarInt(exampleMachineRecipe.ingredients.size());
-            for (Ingredient ingredient : exampleMachineRecipe.ingredients) {
-                ingredient.toNetwork(friendlyByteBuf);
-            }
-            friendlyByteBuf.writeItemStack(exampleMachineRecipe.getResultItem(null),false);
+            exampleMachineRecipe.inputItem.toNetwork(friendlyByteBuf);
+            exampleMachineRecipe.inputFluid.writeToPacket(friendlyByteBuf);
+            exampleMachineRecipe.outputFluid.writeToPacket(friendlyByteBuf);
+            friendlyByteBuf.writeItemStack(exampleMachineRecipe.outputItem,false);
         }
 
         @Override
         public @Nullable ExampleMachineRecipe fromNetwork(ResourceLocation resourceLocation,
                                                           FriendlyByteBuf friendlyByteBuf) {
-            NonNullList<Ingredient> ingredients = NonNullList.withSize(friendlyByteBuf.readInt(), Ingredient.EMPTY);
-            for (int i = 0; i < ingredients.size(); ++i) {
-                ingredients.set(i,Ingredient.fromNetwork(friendlyByteBuf));
-            }
-            ItemStack output = friendlyByteBuf.readItem();
-            return new ExampleMachineRecipe(ingredients, output, resourceLocation);
+            Ingredient inputItem = Ingredient.fromNetwork(friendlyByteBuf);
+            FluidStack inputFluid = FluidStack.readFromPacket(friendlyByteBuf);
+            FluidStack outputFluid = FluidStack.readFromPacket(friendlyByteBuf);
+            ItemStack outputItem = friendlyByteBuf.readItem();
+            return new ExampleMachineRecipe(inputItem,inputFluid,outputFluid,outputItem, resourceLocation);
         }
     }
 }

@@ -1,14 +1,22 @@
 {
   "type": "machineexample:example_machine",
-  "ingredients": [
-    {
-      "item": "minecraft:gold_ingot"
+  "outputs": {
+    "fluid": {
+      "fluid": "minecraft:water",
+      "amount": 1000
     },
-    {
-      "item": "minecraft:redstone"
+    "item": {
+      "item": "minecraft:iron_ingot",
+      "count": 2
     }
-  ],
-  "output": {
-    "item": "minecraft:iron_ingot"
+  },
+  "inputs": {
+    "fluid": {
+      "fluid": "minecraft:lava",
+      "amount": 1000
+    },
+    "item": {
+      "item": "minecraft:raw_iron"
+    }
   }
 }
