@@ -1,13 +1,17 @@
 package dev.fiberoptics.machineexample.block.entity;
 
 import dev.fiberoptics.machineexample.capability.ModItemStackHandler;
+import dev.fiberoptics.machineexample.recipe.ExampleMachineRecipe;
+import dev.fiberoptics.machineexample.recipe.ModRecipeTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,9 +19,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class ExampleMachineBlockEntity extends BlockEntity {
 
@@ -43,18 +48,32 @@ public class ExampleMachineBlockEntity extends BlockEntity {
     }
 
     private void tick(Level level, BlockPos pos, BlockState state) {
-        if(inventory.getStackInSlot(0).is(Items.IRON_INGOT) && inventory.getStackInSlot(1).is(Items.GOLD_NUGGET)) {
+        ItemStack result = this.getResult();
+        if(!getResult().isEmpty()) {
             if(progress >= MAX_PROGRESS) {
                 ItemStack stack = inventory.getStackInSlot(2);
-                if(stack.isEmpty() || (stack.is(Items.DIAMOND) && stack.getCount() + 1 <= stack.getMaxStackSize())) {
+                if(stack.isEmpty() || (stack.is(result.getItem()) && stack.getCount() + 1 <= stack.getMaxStackSize())) {
                     inventory.getStackInSlot(0).shrink(1);
                     inventory.getStackInSlot(1).shrink(1);
-                    inventory.setStackInSlot(2, new ItemStack(Items.DIAMOND,stack.getCount() + 1));
+                    inventory.setStackInSlot(2, new ItemStack(result.getItem(),stack.getCount() + 1));
                     progress = 0;
                 }
             } else {
                 progress++;
             }
+        }
+    }
+
+    private ItemStack getResult() {
+        SimpleContainer inv = new SimpleContainer(2);
+        inv.setItem(0, inventory.getStackInSlot(0));
+        inv.setItem(1, inventory.getStackInSlot(1));
+        Optional<ExampleMachineRecipe> recipe =
+                this.level.getRecipeManager().getRecipeFor(ExampleMachineRecipe.Type.INSTANCE,inv,this.level);
+        if(recipe.isPresent()) {
+            return recipe.get().getResultItem(null);
+        } else {
+            return ItemStack.EMPTY;
         }
     }
 
@@ -65,13 +84,15 @@ public class ExampleMachineBlockEntity extends BlockEntity {
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
-        tag.put("inventory",inventory.serializeNBT());
+        tag.putInt("progress", progress);
+        tag.put("Inventory",inventory.serializeNBT());
         super.saveAdditional(tag);
     }
 
     @Override
     public void load(CompoundTag tag) {
-        inventory.deserializeNBT(tag.getCompound("inventory"));
+        progress = tag.getInt("progress");
+        inventory.deserializeNBT(tag.getCompound("Inventory"));
         super.load(tag);
     }
 

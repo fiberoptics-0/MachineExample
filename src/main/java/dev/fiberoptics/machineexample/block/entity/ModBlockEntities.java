@@ -9,10 +9,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ModBlockEntities {
-    public static DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
+    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
             DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MachineExample.MODID);
 
-    public static RegistryObject<BlockEntityType<ExampleMachineBlockEntity>> MACHINE_BE =
+    public static final RegistryObject<BlockEntityType<ExampleMachineBlockEntity>> MACHINE_BE =
             BLOCK_ENTITIES.register("machine_be", () -> BlockEntityType.Builder
                     .of(ExampleMachineBlockEntity::new, ModBlocks.MACHINE_BLOCK.get()).build(null));
 

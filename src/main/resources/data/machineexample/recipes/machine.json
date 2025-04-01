@@ -1,0 +1,14 @@
+{
+  "type": "machineexample:example_machine",
+  "ingredients": [
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:redstone"
+    }
+  ],
+  "output": {
+    "item": "minecraft:iron_ingot"
+  }
+}

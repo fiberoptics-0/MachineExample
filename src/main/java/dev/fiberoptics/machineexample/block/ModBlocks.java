@@ -8,10 +8,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ModBlocks {
-    public static DeferredRegister<Block> BLOCKS =
+    private static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.create(ForgeRegistries.BLOCKS, MachineExample.MODID);
 
-    public static RegistryObject<Block> MACHINE_BLOCK =
+    public static final RegistryObject<Block> MACHINE_BLOCK =
             BLOCKS.register("machine",ExampleMachineBlock::new);
 
     public static void register(IEventBus eventBus) {
