@@ -35,9 +35,9 @@
 
 不幸的是，修改前文中的配方格式是一个较为繁琐的过程，很难在文中进行详细说明。作者在这里列举一些比较重要的点：
 
-  · 将SimpleContainer替换为继承的ModContainer，以支持在配方中搜索流体。
-  · 改变Serializer的格式，从而读取流体输入和输出。
-  · 改变机器方块实体的tick逻辑，使其同时监管四个I/O槽位。
+  · 将SimpleContainer替换为继承的ModContainer，以支持在配方中搜索流体。<br>
+  · 改变Serializer的格式，从而读取流体输入和输出。<br>
+  · 改变机器方块实体的tick逻辑，使其同时监管四个I/O槽位。<br>
 
 对具体修改过程有兴趣的读者可以移步commit详情：https://github.com/fiberoptics-0/MachineExample/commit/eb1b92c55cecc35c64f46c3659c28fecace52617 自行查看。
 
