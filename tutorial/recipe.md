@@ -74,3 +74,29 @@ fromNetwork其实就是将toNetwork里编码的数据读取出来，但是请务
 现在我们完成了RecipeType和RecipeSerializer，可以回到原来的两个方法：
 
 ![image](https://github.com/user-attachments/assets/698335e5-6959-43f4-a10d-bf4e4690a026)
+
+现在是时候注册这些类了：
+
+![image](https://github.com/user-attachments/assets/c9f1e389-2d50-42fb-a93f-c4c07fc5670d)
+
+现在这个配方类型已经正式完成了！但是还没完呢 —— 我们还需要在机器里加入检测配方的逻辑。
+
+在ExampleMachineBlockEntity类里加入如下方法：
+
+![image](https://github.com/user-attachments/assets/e9ed19af-8276-40f9-b831-96453f801728)
+
+这个方法会根据方块当前的物品栏检测是否有合乎配方的输出。
+
+现在，修改tick逻辑：
+
+![image](https://github.com/user-attachments/assets/f250c1af-bd5a-4506-bdf2-54b68745fd80)
+
+我们已经接近大功告成了！最后一步：在datapack里添加测试配方文件：
+
+![image](https://github.com/user-attachments/assets/53869902-b214-44f5-824c-73ca4f397343)
+
+现在让我们进入游戏，向机器依次加入一个红石粉和一个金锭：
+
+![image](https://github.com/user-attachments/assets/edf99a7a-21e5-478a-b34c-b7852a1964a2)
+
+收工。
