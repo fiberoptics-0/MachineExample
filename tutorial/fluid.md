@@ -11,8 +11,35 @@
 
 ![image](https://github.com/user-attachments/assets/36bc70c0-98e0-45ce-943f-7c477e832d61)
 
+唉，我们还是一个一个来。
 
-由于此接口的方法实在有些多而且很无聊，故不在教程内部展示截图，可以[点击链接](/src/main/java/dev/fiberoptics/machineexample/capability/ModFluidStackHandler.java)自行查看。
+![image](https://github.com/user-attachments/assets/6fed4f8f-eb1b-4257-85d7-77ef24ea140d)
+
+首先是必要的流体列表（用来存储流体）以及我们自己要用到的设置流体的方法。
+
+![image](https://github.com/user-attachments/assets/61ec83ac-9b03-4e08-aa49-e2446b928bcb)
+
+getTanks会返回流体存储的格数。
+
+![image](https://github.com/user-attachments/assets/ba66cc6b-6049-42c1-8571-e09899c2dade)
+
+getFluidInTank会返回特定格子里的流体。
+
+![image](https://github.com/user-attachments/assets/a2ad6cb1-6991-4e5a-9196-f0b08dfd2319)
+
+getTankCapacity会返回特定格子的容量，我们这里直接设置为10000。
+
+![image](https://github.com/user-attachments/assets/7fec6022-bac3-4d35-892d-208afe0d6636)
+
+isFluidValid我们现在还用不上，直接无脑true。
+
+![image](https://github.com/user-attachments/assets/930fcb21-3124-4c45-a697-fe2709cede0e)
+
+fill实现了对流体容器的输入。注意我们这里只允许第一格槽位接受输入。
+
+![image](https://github.com/user-attachments/assets/00e08c7b-93b9-4180-bfcb-654b6cf22a9c)
+
+
 
 我们为机器设计了一个两格物品栏和一个两桶的流体栏。每个栏有输入位和输出位各一。
 
