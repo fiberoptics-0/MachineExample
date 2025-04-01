@@ -41,4 +41,12 @@
 
 对具体修改过程有兴趣的读者可以移步commit详情：https://github.com/fiberoptics-0/MachineExample/commit/eb1b92c55cecc35c64f46c3659c28fecace52617 自行查看。
 
+现在我们可以添加测试配方：
 
+![image](https://github.com/user-attachments/assets/32c7621a-940f-429d-9be6-0cf69d95f644)
+
+这是一个简单的矿物处理配方，消耗1000mB岩浆将1粗铁转化为2铁锭，并产生1000mB水。
+
+让我们进入游戏，向机器添加一个粗铁：
+
+![image](https://github.com/user-attachments/assets/6f04c0e5-8960-46a4-96cc-46440ff7d5ba)
