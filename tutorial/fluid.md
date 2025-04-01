@@ -91,6 +91,10 @@ deserializeNBT从nbt数据内读取流体存储信息。请务必和serializeNBT
 
 ![image](https://github.com/user-attachments/assets/6e3f6326-de0f-46d3-9268-963063342a70)
 
+并添加一个我们自己要用到的获取流体消耗量的方法：
+
+![image](https://github.com/user-attachments/assets/901bf211-f7e9-4161-9ea6-cd7cac69441a)
+
 配方里的其他几个方法可以暂时不用动，反正也用不着。
 
 然后我们需要实现配方的json读取逻辑。
