@@ -39,4 +39,6 @@
   · 改变Serializer的格式，从而读取流体输入和输出。
   · 改变机器方块实体的tick逻辑，使其同时监管四个I/O槽位。
 
-对具体修改过程有兴趣的读者可以[移步commit详情](/commit/eb1b92c55cecc35c64f46c3659c28fecace52617)自行查看。
+对具体修改过程有兴趣的读者可以移步commit详情：https://github.com/fiberoptics-0/MachineExample/commit/eb1b92c55cecc35c64f46c3659c28fecace52617 自行查看。
+
+
