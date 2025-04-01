@@ -58,3 +58,5 @@
 ![image](https://github.com/user-attachments/assets/a26c5e3a-4ac3-4a55-ab1b-f68d3475267c)
 
 很好，现在我们的机器终于在某些方面上超越了原版方块 —— 至少比熔炉强一丁点吧。
+
+[**点此进入下一章节**](/tutorial/recipe.md)
