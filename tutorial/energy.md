@@ -1,5 +1,5 @@
 
-# 抛瓦 is 抛瓦！（IEnergyStorage）
+# 第六步：抛瓦 is 抛瓦！（IEnergyStorage）
 
 既然我们已经有了物品和流体的相关处理，不妨把能量也加上。
 
