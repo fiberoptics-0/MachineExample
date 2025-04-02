@@ -1,8 +1,6 @@
 
 # 第二步：物品I/O（Capabilities）
 
-请忽略标题里的冷笑话。
-
 为了适应各种物流mod层出不穷，物品/流体/能量鱼龙混杂的时代，Forge推出了Capabilities来代替掉老旧的Container和WorldlyContainer。
 
 Capabilities随着方块的面而变化。例如，一个机器可能在顶部和底部运输物品，南面和北面运输流体，东面和西面运输能量。
