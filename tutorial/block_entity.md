@@ -7,7 +7,7 @@
 
 ![image](https://github.com/user-attachments/assets/e6180119-51d6-4dbb-a32d-7ed3332dde8a)
 
-这里IDE会报错，因为我们需要实现一个方法：newEntity
+这里IDE会报错，因为我们需要实现一个方法：newBlockEntity
 
 ![image](https://github.com/user-attachments/assets/e7d2fdb6-9240-494b-ab7d-0489608348ac)
 
