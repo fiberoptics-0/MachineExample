@@ -144,3 +144,5 @@ deserializeNBT从nbt数据内读取流体存储信息。请务必和serializeNBT
 ![image](https://github.com/user-attachments/assets/6f04c0e5-8960-46a4-96cc-46440ff7d5ba)
 
 大功告成。
+
+[**点此进入下一章节**](/tutorial/energy.md)
