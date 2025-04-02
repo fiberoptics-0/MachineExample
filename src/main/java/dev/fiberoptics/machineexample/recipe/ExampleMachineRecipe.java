@@ -1,15 +1,12 @@
 package dev.fiberoptics.machineexample.recipe;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import dev.fiberoptics.machineexample.recipe.container.ModContainer;
 import dev.fiberoptics.machineexample.util.Utils;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -18,21 +15,23 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.Nullable;
 
 public class ExampleMachineRecipe implements Recipe<ModContainer> {
 
     private final Ingredient inputItem;
     private final FluidStack inputFluid;
+    private final int inputEnergy;
     private final ItemStack outputItem;
     private final FluidStack outputFluid;
     private final ResourceLocation id;
 
-    public ExampleMachineRecipe(Ingredient inputItem, FluidStack inputFluid,
+
+    public ExampleMachineRecipe(Ingredient inputItem, FluidStack inputFluid, int inputEnergy,
                                 FluidStack outputFluid,ItemStack outputItem, ResourceLocation id) {
         this.inputItem = inputItem;
         this.inputFluid = inputFluid;
+        this.inputEnergy = inputEnergy;
         this.outputItem = outputItem;
         this.outputFluid = outputFluid;
         this.id = id;
@@ -44,7 +43,12 @@ public class ExampleMachineRecipe implements Recipe<ModContainer> {
         boolean condition1 = inputItem.test(inv.getItem(0));
         boolean condition2 = inputFluid.isFluidEqual(inv.getFluidStack(0)) &&
                 inv.getFluidStack(0).getAmount() >= inputFluid.getAmount();
-        return condition1 && condition2;
+        boolean condition3 = inv.getEnergy(0) >= inputEnergy;
+        return condition1 && condition2 && condition3;
+    }
+
+    public int getEnergyCost() {
+        return inputEnergy;
     }
 
     public int getFluidCost() {
@@ -104,13 +108,15 @@ public class ExampleMachineRecipe implements Recipe<ModContainer> {
             FluidStack outputFluid = Utils.getFluidStack(outputFluidJson);
             Ingredient inputItem = Ingredient.fromJson(inputItemJson);
             FluidStack inputFluid = Utils.getFluidStack(inputFluidJson);
-            return new ExampleMachineRecipe(inputItem,inputFluid,outputFluid,outputItem,resourceLocation);
+            int inputEnergy = GsonHelper.getAsInt(inputsJson, "energy");
+            return new ExampleMachineRecipe(inputItem,inputFluid,inputEnergy,outputFluid,outputItem,resourceLocation);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf friendlyByteBuf, ExampleMachineRecipe exampleMachineRecipe) {
             exampleMachineRecipe.inputItem.toNetwork(friendlyByteBuf);
             exampleMachineRecipe.inputFluid.writeToPacket(friendlyByteBuf);
+            friendlyByteBuf.writeInt(exampleMachineRecipe.inputEnergy);
             exampleMachineRecipe.outputFluid.writeToPacket(friendlyByteBuf);
             friendlyByteBuf.writeItemStack(exampleMachineRecipe.outputItem,false);
         }
@@ -120,9 +126,10 @@ public class ExampleMachineRecipe implements Recipe<ModContainer> {
                                                           FriendlyByteBuf friendlyByteBuf) {
             Ingredient inputItem = Ingredient.fromNetwork(friendlyByteBuf);
             FluidStack inputFluid = FluidStack.readFromPacket(friendlyByteBuf);
+            int inputEnergy = friendlyByteBuf.readInt();
             FluidStack outputFluid = FluidStack.readFromPacket(friendlyByteBuf);
             ItemStack outputItem = friendlyByteBuf.readItem();
-            return new ExampleMachineRecipe(inputItem,inputFluid,outputFluid,outputItem, resourceLocation);
+            return new ExampleMachineRecipe(inputItem,inputFluid,inputEnergy,outputFluid,outputItem, resourceLocation);
         }
     }
 }

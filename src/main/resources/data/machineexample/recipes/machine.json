@@ -17,6 +17,7 @@
     },
     "item": {
       "item": "minecraft:raw_iron"
-    }
+    },
+    "energy": 1000
   }
 }
