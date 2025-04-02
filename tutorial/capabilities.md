@@ -1,5 +1,5 @@
 
-# 第二步：想要I/O，你有这个“能力”吗？（Capabilities）
+# 第二步：物品I/O（Capabilities）
 
 请忽略标题里的冷笑话。
 
