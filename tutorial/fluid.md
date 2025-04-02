@@ -69,7 +69,7 @@ deserializeNBT从nbt数据内读取流体存储信息。请务必和serializeNBT
 
 ![image](https://github.com/user-attachments/assets/3a128fd9-6cc6-4813-8ec2-b90ede264bcd)
 
-下面进游戏看看效果。我们用机动的泵和创造储罐向机器输入岩浆：
+下面进游戏看看效果。我们用机械动力的泵和创造储罐向机器输入岩浆：
 
 ![image](https://github.com/user-attachments/assets/e3a2fa96-4d76-4e55-be60-b6e96b9cbe32)
 
