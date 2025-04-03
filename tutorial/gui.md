@@ -11,7 +11,7 @@
 
 把这个材质扔进画图软件，稍微改一改，我们就可以获得如下材质：
 
-![image](https://github.com/user-attachments/assets/ceb2bdb2-0ded-4493-a6ab-863ad25406e0)
+![image](https://github.com/user-attachments/assets/89d76cb5-5b82-4328-91b9-2150ff4631da)
 
 画完材质之后一定要确认好各种物品栏位和gui构件的（左上角）坐标，待会要用到。
 
@@ -88,4 +88,18 @@ blit方法会从特定材质中截取一个选定的矩形，画到屏幕的指�
 ![image](https://github.com/user-attachments/assets/203bbd25-4013-4c26-b6e1-5f710e596c4f)
 
 还好这些都比较一目了然。现在我们得将Menu和Screen注册。首先是Menu：
+
+![image](https://github.com/user-attachments/assets/b17ce1aa-827f-4a35-9e91-0cd05482921e)
+
+然后是Screen。这个得用事件监听注册：
+
+![image](https://github.com/user-attachments/assets/ca8553d4-d038-4a2c-ae83-fa23400ccb9e)
+
+现在万事具备了。最后一步是在ExampleMachineBlock里告诉游戏在玩家右键的时候打开相应gui：
+
+![image](https://github.com/user-attachments/assets/01cf998c-6f59-46f7-97ae-81d92d9866c5)
+
+现在让我们进入游戏：
+
+![image](https://github.com/user-attachments/assets/8935beab-fe96-48d0-a32d-5c112c7d90ca)
 
