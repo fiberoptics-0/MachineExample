@@ -61,9 +61,10 @@
 
 ![image](https://github.com/user-attachments/assets/e010eb40-bc9e-4a24-ae8c-2cb23e8fd06b)
 
-[**点此进入下一章节**](/tutorial/gui.md)
 这个配方之前的基础上多加上了1000单位的能量需求。
 
 让我们进入游戏，用mekanism的发电机和线缆为机器供能：
 
 ![image](https://github.com/user-attachments/assets/02158b2e-062a-4a8e-8caf-5f8c32504d43)
+
+[**点此进入下一章节**](/tutorial/gui.md)
