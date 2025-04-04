@@ -129,6 +129,7 @@ public class ExampleMachineRecipe implements Recipe<ModContainer> {
             int inputEnergy = friendlyByteBuf.readInt();
             FluidStack outputFluid = FluidStack.readFromPacket(friendlyByteBuf);
             ItemStack outputItem = friendlyByteBuf.readItem();
+
             return new ExampleMachineRecipe(inputItem,inputFluid,inputEnergy,outputFluid,outputItem, resourceLocation);
         }
     }

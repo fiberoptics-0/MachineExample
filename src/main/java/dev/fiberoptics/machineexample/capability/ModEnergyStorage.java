@@ -4,7 +4,7 @@ import net.minecraftforge.energy.EnergyStorage;
 
 public class ModEnergyStorage extends EnergyStorage {
     public ModEnergyStorage() {
-        super(10000);
+        super(1000000);
     }
 
     @Override
