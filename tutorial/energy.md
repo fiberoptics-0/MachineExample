@@ -66,3 +66,5 @@
 让我们进入游戏，用mekanism的发电机和线缆为机器供能：
 
 ![image](https://github.com/user-attachments/assets/02158b2e-062a-4a8e-8caf-5f8c32504d43)
+
+[**点此进入下一章节**](/tutorial/gui.md)
