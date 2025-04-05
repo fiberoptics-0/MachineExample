@@ -39,6 +39,11 @@
 
 ![image](https://github.com/user-attachments/assets/dd40f716-827c-4913-889c-9a1ebdd99256)
 
+记得添加lang文件条目：
+
+![image](https://github.com/user-attachments/assets/0385a6c7-5f99-48d8-9389-2db7482d181b)
+
+
 效果如下：
 
 ![image](https://github.com/user-attachments/assets/d9cbd1e5-2dc3-4655-9bf9-193ecf16f466)
