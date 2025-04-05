@@ -2,6 +2,7 @@ package dev.fiberoptics.machineexample.menu;
 
 import dev.fiberoptics.machineexample.block.ModBlocks;
 import dev.fiberoptics.machineexample.block.entity.ExampleMachineBlockEntity;
+import dev.fiberoptics.machineexample.menu.slot.ModSlotItemHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -32,8 +33,8 @@ public class ExampleMachineMenu extends AbstractContainerMenu {
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
         blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-            this.addSlot(new SlotItemHandler(handler,0,55,34));
-            this.addSlot(new SlotItemHandler(handler,1,112,34));
+            this.addSlot(new ModSlotItemHandler(handler,0,55,34));
+            this.addSlot(new ModSlotItemHandler(handler,1,112,34));
         });
         addDataSlots(data);
     }
@@ -52,11 +53,30 @@ public class ExampleMachineMenu extends AbstractContainerMenu {
         }
     }
 
-
-
     @Override
-    public ItemStack quickMoveStack(Player player, int i) {
-        return ItemStack.EMPTY;
+    public ItemStack quickMoveStack(Player player, int index) {
+        Slot sourceSlot = this.slots.get(index);
+        if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;
+        ItemStack sourceStack = sourceSlot.getItem();
+        ItemStack copyOfSourceStack = sourceStack.copy();
+        if(index < 9 + 27) {
+            if(!moveItemStackTo(sourceStack,9 + 27, 9 + 27 + 1, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (index < 9 + 27 + 2) {
+            if(!moveItemStackTo(sourceStack,0, 9 + 27, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else {
+            return ItemStack.EMPTY;
+        }
+        if(sourceStack.getCount() == 0) {
+            sourceSlot.set(ItemStack.EMPTY);
+        } else {
+            sourceSlot.setChanged();
+        }
+        sourceSlot.onTake(player, sourceStack);
+        return copyOfSourceStack;
     }
 
     @Override

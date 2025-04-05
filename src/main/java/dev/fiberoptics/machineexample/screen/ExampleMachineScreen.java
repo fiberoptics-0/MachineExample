@@ -21,6 +21,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Matrix4f;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class ExampleMachineScreen extends AbstractContainerScreen<ExampleMachineMenu> {
 
@@ -126,5 +129,31 @@ public class ExampleMachineScreen extends AbstractContainerScreen<ExampleMachine
         renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, delta);
         renderTooltip(guiGraphics, mouseX, mouseY);
+    }
+
+    @Override
+    protected void renderTooltip(GuiGraphics pGuiGraphics, int pX, int pY) {
+        super.renderTooltip(pGuiGraphics, pX, pY);
+        int x = (width - imageWidth) / 2;
+        int y = (height - imageHeight) / 2;
+        List<Component> tooltips = new ArrayList<>();
+        if(pX >= x+54 && pX <= x+128 && pY >= y+23 && pY <= y+27) {
+            tooltips.add(Component.translatable(
+                    "tooltip.machineexample.energy", menu.data.get(2),menu.data.get(3)));
+
+        } else if (pX >= x+18 && pX <= x+47 && pY >= y+23 && pY <= y+65) {
+            tooltips.add(menu.blockEntity.getFluidStack(0).getFluid().getFluidType().getDescription());
+            tooltips.add(Component.translatable(
+                    "tooltip.machineexample.fluid_amount",
+                    menu.blockEntity.getFluidStack(0).getAmount(),
+                    menu.blockEntity.getCapacity(0)));
+        } else if (pX >= x+135 && pX <= x+164 && pY >= y+23 && pY <= y+65) {
+            tooltips.add(menu.blockEntity.getFluidStack(1).getFluid().getFluidType().getDescription());
+            tooltips.add(Component.translatable(
+                    "tooltip.machineexample.fluid_amount",
+                    menu.blockEntity.getFluidStack(1).getAmount(),
+                    menu.blockEntity.getCapacity(1)));
+        }
+        pGuiGraphics.renderTooltip(this.font,tooltips, Optional.empty(), pX, pY);
     }
 }
